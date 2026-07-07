@@ -2,7 +2,7 @@
 
 A full-stack, AI-powered secure online examination platform with real-time proctoring, anti-cheating enforcement, and AI-powered answer evaluation and question extraction.
 
-**Live Demo:** [[live link](https://examforge-peach.vercel.app/)]
+**Live Demo:** [[live link](https://exam-forge-chi.vercel.app/)]
 
 ---
 
@@ -326,7 +326,7 @@ Groq free tier is generous — fast inference with no billing required for devel
 
 ### Admin workflow
 
-1. Register with an `@iitr.ac.in` email — auto-assigned Admin role
+1. Register with an `@nitk@edu.in` email — auto-assigned Admin role
 2. Go to Admin Dashboard → click **+ New Exam**
 3. Fill in exam details and click **Create Exam**
 4. Add questions:
@@ -339,7 +339,7 @@ Groq free tier is generous — fast inference with no billing required for devel
 
 ### Student workflow
 
-1. Register with any non-`@iitr.ac.in` email — auto-assigned Student role
+1. Register with any non-`@nitk@edu.in` email — auto-assigned Student role
 2. Enter the exam code on the Student Dashboard (or click the shareable link)
 3. Complete the pre-exam checklist:
    - Click **Grant Access** for camera and microphone
@@ -411,13 +411,13 @@ https://your-backend.onrender.com/health
 
 | Email Domain | Role | Dashboard |
 |---|---|---|
-| `@iitr.ac.in` | Admin | Exam management |
+| `@nitk@edu.in` | Admin | Exam management |
 | Any other domain | Student | Exam portal |
 
 To change the admin email domain, edit `backend/src/controllers/authController.js`:
 
 ```javascript
-const role = email.endsWith('@iitr.ac.in') ? 'admin' : 'student';
+const role = email.endsWith('@nitk@edu.in') ? 'admin' : 'student';
 ```
 
 ---
