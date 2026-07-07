@@ -5,10 +5,12 @@ require('./config/passport');
 
 const app = express();
 app.set('trust proxy', 1);
+
 // Add this log so we can spy on Render's brain
 console.log("Render sees this FRONTEND_URL string:", process.env.FRONTEND_URL);
 const dns = require('dns');
 dns.setDefaultResultOrder('ipv4first');
+
 app.use(cors({
   // Hardcoding both URLs directly into the array
   origin: [
@@ -16,11 +18,15 @@ app.use(cors({
     'https://exam-forge-chi.vercel.app'
   ],
   credentials: true,
+  // Allow these methods and the token header
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'] 
 }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
+
 app.use('/api/student', require('./routes/studentRoutes'));
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'ExamForge API is awake!' });
