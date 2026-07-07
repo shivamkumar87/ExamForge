@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String       @id @default(cuid())
+  name         String?
+  email        String       @unique
+  passwordHash String?
+  role         String       @default("student")
+  authProvider String       @default("email")
+  createdAt    DateTime     @default(now())
+  submissions  Submission[]
+  exams        Exam[]
+  otps         Otp[]
+}
+
+model Exam {
+  id              String       @id @default(cuid())
+  adminId         String
+  admin           User         @relation(fields: [adminId], references: [id])
+  title           String
+  subject         String
+  description     String?
+  durationMinutes Int
+  totalMarks      Int
+  status          String       @default("draft")
+  createdAt       DateTime     @default(now())
+  questions       Question[]
+  examCodes       ExamCode[]
+  submissions     Submission[]
+}
+
+model ExamCode {
+  id          String   @id @default(cuid())
+  examId      String
+  exam        Exam     @relation(fields: [examId], references: [id])
+  code        String   @unique
+  generatedAt DateTime @default(now())
+  expiresAt   DateTime
+  isActive    Boolean  @default(true)
+}
+
+model Question {
+  id           String   @id @default(cuid())
+  examId       String
+  exam         Exam     @relation(fields: [examId], references: [id])
+  questionText String
+  modelAnswer  String
+  marks        Int
+  orderIndex   Int
+  answers      Answer[]
+}
+
+model Submission {
+  id             String      @id @default(cuid())
+  examId         String
+  exam           Exam        @relation(fields: [examId], references: [id])
+  studentId      String
+  student        User   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  submittedAt    DateTime    @default(now())
+  status         String      @default("complete")
+  violationCount Int         @default(0)
+  answers        Answer[]
+  violations     Violation[]
+  startedAt      DateTime  @default(now())
+}
+
+model Answer {
+  id                 String     @id @default(cuid())
+  submissionId       String
+  submission         Submission @relation(fields: [submissionId], references: [id])
+  questionId         String
+  question           Question   @relation(fields: [questionId], references: [id])
+  studentAnswer      String
+  aiScore            Float?
+  adminOverrideScore Float?
+}
+
+model Violation {
+  id           String     @id @default(cuid())
+  submissionId String
+  submission   Submission @relation(fields: [submissionId], references: [id])
+  type         String
+  timestamp    DateTime   @default(now())
+}
+
+model Otp {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  otpHash   String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+}
