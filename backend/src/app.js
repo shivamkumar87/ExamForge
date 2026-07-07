@@ -13,7 +13,7 @@ app.use(cors({
   // Hardcoding both URLs directly into the array
   origin: [
     'http://localhost:5173', 
-    'https://examforge-chi.vercel.app'
+    'https://exam-forge-chi.vercel.app'
   ],
   credentials: true,
 }));
